@@ -17,6 +17,13 @@ namespace EFT.Trainer.Features
 		[ConfigurationProperty]
 		public float MaximumDistance { get; set; } = 0f;
 
+
+		[ConfigurationProperty(Order = 60)]
+		public float ScaleX { get; set; } = 1.0f;
+
+		[ConfigurationProperty(Order = 61)]
+		public float ScaleY { get; set; } = 1.0f;
+
 		public abstract Color GroupingColor { get; }
 
 		public override void ProcessDataOnGUI(PointOfInterest[] data)
@@ -29,7 +36,7 @@ namespace EFT.Trainer.Features
 			foreach (var positionGroup in poiPerPosition)
 			{
 				var position = positionGroup.Key;
-				var screenPosition = camera.WorldPointToScreenPoint(position);
+				var screenPosition = camera.WorldPointToScreenPoint(position, ScaleX, ScaleY);
 				if (!camera.IsScreenPointVisible(screenPosition))
 					continue;
 

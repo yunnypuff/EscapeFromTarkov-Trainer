@@ -84,11 +84,13 @@ namespace EFT.Trainer.Features
 				if (!string.IsNullOrEmpty(StatusFilter) && StatusFilter.IndexOf(GetStatus(point.Status), StringComparison.OrdinalIgnoreCase) >= 0)
 					continue;
 
+				var screenPosition = camera.WorldPointToScreenPoint(position, ScaleX, ScaleY);
+
 				records.Add(new PointOfInterest
 				{
 					Name = GetName(point, isEligible),
 					Position = position,
-					ScreenPosition = camera.WorldPointToScreenPoint(position),
+					ScreenPosition = screenPosition,
 					Color = isEligible ? EligibleColor : NotEligibleColor
 				});
 			}

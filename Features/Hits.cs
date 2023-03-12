@@ -41,6 +41,21 @@ namespace EFT.Trainer.Features
 		[ConfigurationProperty(Order = 32)]
 		public bool ShowHealthDamage { get; set; } = true;
 
+		[ConfigurationProperty(Order = 33)]
+		public bool ShowCrossTickMarker { get; set; } = true;
+
+		[ConfigurationProperty(Order = 34)]
+		public float ScaleX { get; set; } = 1.0f;
+
+		[ConfigurationProperty(Order = 35)]
+		public float ScaleY { get; set; } = 1.0f;
+
+		[ConfigurationProperty(Order = 36)]
+		public float TickDisplayTime { get; set; } = 0.3f;
+
+		[ConfigurationProperty(Order = 37)]
+		public float TickFadeTime { get; set; } = 1.0f;
+
 
 		internal class HitMarker
 		{
@@ -104,12 +119,38 @@ namespace EFT.Trainer.Features
 				var armorDamage = Mathf.Round(damageInfo.ArmorDamage);
 				var damage = Mathf.Round(damageInfo.Damage);
 				var hitPoint = damageInfo.HitPoint;
-				var screenHitPoint = camera.WorldPointToScreenPoint(hitPoint);
+				var screenHitPoint = camera.WorldPointToScreenPoint(hitPoint, ScaleX, ScaleY);
 
 				if (ShowHitMarker)
 				{
+					var hitmarkerColor = HitMarkerColor.SetAlpha(alpha);
 					var radius = 16f + marker.ElapsedTime * 2;
-					Render.DrawCircle(screenHitPoint, radius, HitMarkerColor.SetAlpha(alpha), 2.98f, 32);
+
+					Render.DrawCircle(screenHitPoint, radius, hitmarkerColor, 2.98f, 32);
+				}
+
+				if (ShowCrossTickMarker)
+				{
+					var tickAlpha = marker.ElapsedTime > TickDisplayTime && TickFadeTime > 0f ?
+						(TickFadeTime - marker.ElapsedTime + TickDisplayTime) / TickFadeTime : 1.0f;
+
+					var tickMarkerColor = HitMarkerColor.SetAlpha(tickAlpha);
+
+					// Draw an X tick with a hollow center
+					const float tickDistance = 32f;
+					const float halfTickDistance = tickDistance / 2;
+					const int thickness = 4;
+
+					var centerx = Screen.width / 2;
+					var centery = Screen.height / 2;
+					// bottom left tick to center
+					Render.DrawLine(new Vector2(centerx - tickDistance, centery - tickDistance), new Vector2(centerx - halfTickDistance, centery - halfTickDistance), thickness, tickMarkerColor);
+					// bottom right tick to center
+					Render.DrawLine(new Vector2(centerx + tickDistance, centery - tickDistance), new Vector2(centerx + halfTickDistance, centery - halfTickDistance), thickness, tickMarkerColor);
+					// top right tick to center
+					Render.DrawLine(new Vector2(centerx + tickDistance, centery + tickDistance), new Vector2(centerx + halfTickDistance, centery + halfTickDistance), thickness, tickMarkerColor);
+					// top left tick to center
+					Render.DrawLine(new Vector2(centerx - tickDistance, centery + tickDistance), new Vector2(centerx - halfTickDistance, centery + halfTickDistance), thickness, tickMarkerColor);
 				}
 
 				var offset = 0f;

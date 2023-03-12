@@ -78,7 +78,7 @@ namespace EFT.Trainer.Features
 						{
 							Name = $"{lootItem.Item.ShortName.Localized()} ({quest.Template.Name})",
 							Position = position,
-							ScreenPosition = camera.WorldPointToScreenPoint(position),
+							ScreenPosition = camera.WorldPointToScreenPoint(position, ScaleX, ScaleY),
 							Color = Color
 						});
 					}
@@ -109,7 +109,7 @@ namespace EFT.Trainer.Features
 					{
 						Name = isMultitool ? "Repair" : $"Place {result.Template.NameLocalizationKey.Localized()}",
 						Position = position,
-						ScreenPosition = camera.WorldPointToScreenPoint(position),
+						ScreenPosition = camera.WorldPointToScreenPoint(position, ScaleX, ScaleY),
 						Color = Color
 					});
 					break;

@@ -14,7 +14,7 @@
     <TargetFrameworkProfile />
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
-    <EFTBasePath>C:\Battlestate Games\sptarkov</EFTBasePath>
+    <EFTBasePath>F:\Games\EscapeFromTarkovSPT_3.5.x_0.13.0.3.22173</EFTBasePath>
     <EFTDataPath>$(EFTBasePath)\EscapeFromTarkov_Data</EFTDataPath>
     <EFTManagedPath>$(EFTDataPath)\Managed</EFTManagedPath>
   </PropertyGroup>

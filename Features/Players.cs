@@ -76,6 +76,12 @@ namespace EFT.Trainer.Features
 		[ConfigurationProperty(Order = 19)]
 		public float MaximumDistance { get; set; } = 0f;
 
+		[ConfigurationProperty(Order = 60)]
+		public float ScaleX { get; set; } = 1.0f;
+
+		[ConfigurationProperty(Order = 61)]
+		public float ScaleY { get; set; } = 1.0f;
+
 		private static bool _lastXRayVision = true;
 		private static bool _lastShowCharms = true;
 
@@ -119,7 +125,8 @@ namespace EFT.Trainer.Features
 					SetShaders(ennemy, GameState.OutlineShader, color, borderColor, cache);
 
 				var position = ennemy.Transform.position;
-				var screenPosition = camera.WorldPointToScreenPoint(position);
+				var screenPosition = camera.WorldPointToScreenPoint(position, ScaleX, ScaleY);
+
 				if (!camera.IsScreenPointVisible(screenPosition))
 					continue;
 
@@ -131,8 +138,8 @@ namespace EFT.Trainer.Features
 				if (playerBones == null)
 					continue;
 
-				var headScreenPosition = camera.WorldPointToScreenPoint(playerBones.Head.position);
-				var leftShoulderScreenPosition = camera.WorldPointToScreenPoint(playerBones.LeftShoulder.position);
+				var headScreenPosition = camera.WorldPointToScreenPoint(playerBones.Head.position, ScaleX, ScaleY);
+				var leftShoulderScreenPosition = camera.WorldPointToScreenPoint(playerBones.LeftShoulder.position, ScaleX, ScaleY);
 				var heightOffset = Mathf.Abs(headScreenPosition.y - leftShoulderScreenPosition.y);
 
 				var boxHeight = Mathf.Abs(headScreenPosition.y - screenPosition.y) + heightOffset * 3f;
@@ -159,7 +166,7 @@ namespace EFT.Trainer.Features
 				}
 
 				if (ShowSkeletons)
-					Bones.RenderBones(ennemy, SkeletonThickness, color, camera);
+					Bones.RenderBones(ennemy, SkeletonThickness, color, camera, ScaleX, ScaleY);
 			}
 		}
 

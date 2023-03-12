@@ -78,20 +78,20 @@ namespace EFT.Trainer.Features
 			new [] {RPalm, RDigit11}, new [] {RDigit41, RDigit42}, new [] {RDigit42, RDigit43}, new [] {RPalm, RDigit11}, new [] {RDigit51, RDigit52}, new [] {RDigit52, RDigit53}
 		};
 
-		public static void RenderBone(Dictionary<string, Transform> bones, string from, string to, float thickness, Color color, Camera camera)
+		public static void RenderBone(Dictionary<string, Transform> bones, string from, string to, float thickness, Color color, Camera camera, float scaleX, float scaleY)
 		{
-			RenderBone(bones[from].position, bones[to].position, thickness, color, camera);
+			RenderBone(bones[from].position, bones[to].position, thickness, color, camera, scaleX, scaleY);
 		}
 
-		public static void RenderBone(Vector3 fromPosition, Vector3 toPosition, float thickness, Color color, Camera camera)
+		public static void RenderBone(Vector3 fromPosition, Vector3 toPosition, float thickness, Color color, Camera camera, float scaleX, float scaleY)
 		{
-			var fromScreenPosition = camera.WorldPointToScreenPoint(fromPosition);
-			var toScreenPosition = camera.WorldPointToScreenPoint(toPosition);
+			var fromScreenPosition = camera.WorldPointToScreenPoint(fromPosition, scaleX, scaleY);
+			var toScreenPosition = camera.WorldPointToScreenPoint(toPosition, scaleX, scaleY);
 
 			Render.DrawLine(new Vector2(fromScreenPosition.x, fromScreenPosition.y), new Vector2(toScreenPosition.x, toScreenPosition.y), thickness, color);
 		}
 
-		public static void RenderBones(Player player, float thickness, Color color, Camera camera)
+		public static void RenderBones(Player player, float thickness, Color color, Camera camera, float scaleX, float scaleY)
 		{
 			var skeleton = player.PlayerBody.SkeletonRootJoint;
 			if (skeleton == null)
@@ -102,10 +102,10 @@ namespace EFT.Trainer.Features
 				return;
 
 			foreach (var connection in Connections)
-				RenderBone(bones, connection[0], connection[1], thickness, color, camera);
+				RenderBone(bones, connection[0], connection[1], thickness, color, camera, scaleX, scaleY);
 
-			var head = camera.WorldPointToScreenPoint(bones[Head].position);
-			var neck = camera.WorldPointToScreenPoint(bones[Neck].position);
+			var head = camera.WorldPointToScreenPoint(bones[Head].position, scaleX, scaleY);
+			var neck = camera.WorldPointToScreenPoint(bones[Neck].position, scaleX, scaleY);
 			var radius = Vector3.Distance(head, neck);
 
 			Render.DrawCircle(new Vector2(head.x, head.y), radius, color, thickness, 8);
